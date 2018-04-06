@@ -58,7 +58,25 @@ public class ScheduleController{
         response.addHeader("Location", "api/schedules/" + scheduleId);
         return scheduleRepository.save(schedule);
     }
-
+    @PatchMapping("/schedules/{id}")
+    public Schedule patchSchedule(@PathVariable(value = "id") Long scheduleId, @Valid @RequestBody Schedule newSchedule, HttpServletResponse response) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new WebException("PATCH api/sechedules/id", "- no such schedule"));
+            if (newSchedule.getStartPort() == null && newSchedule.getDestination() == null && newSchedule.getAirplaneId() == 0) {
+                throw new WebException("PATCH api/schedules", "empty path request body");
+            }
+            if(newSchedule.getStartPort() != null){
+                schedule.setStartPort(newSchedule.getStartPort());
+            }
+            if(newSchedule.getDestination() != null){
+                schedule.setDestination(newSchedule.getDestination());
+            }
+            if(newSchedule.getAirplaneId() != 0){
+                schedule.setAirplaneId(newSchedule.getAirplaneId());
+            }
+            response.setStatus(202);
+            response.addHeader("Location", "api/schedules/" + scheduleId);
+            return scheduleRepository.save(schedule);
+    }
     @DeleteMapping("/schedules/{id}")
     public ResponseEntity<?> deleteSchedule(@PathVariable(value = "id") Long scheduleId){
         Schedule post = scheduleRepository.findById(scheduleId).orElseThrow(() -> new WebException("DELETE api/schedules/id", "- airplane with id: " + scheduleId + " does not exist."));

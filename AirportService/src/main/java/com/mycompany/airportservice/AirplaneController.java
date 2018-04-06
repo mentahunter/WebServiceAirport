@@ -51,6 +51,26 @@ public class AirplaneController{
         response.addHeader("Location", "api/airplanes/" + airplaneId);
         return airplaneRepository.save(airplane);
     }
+    
+    
+    @PatchMapping("/airplanes/{id}")
+    public Airplane patchAirplane(@PathVariable(value = "id") Long airplaneId, @Valid @RequestBody Airplane newAirplane, HttpServletResponse response) {
+        Airplane airplane = airplaneRepository.findById(airplaneId).orElseThrow(() -> new WebException("PATCH api/airplanes/id", "- no such airplane"));
+            if (newAirplane.getModel() == null && newAirplane.getCapacity() <= 0) {
+                throw new WebException("PATCH api/airplanes", "empty path request body");
+            }
+            if(newAirplane.getModel() != null){
+                airplane.setModel(newAirplane.getModel());    
+            }
+            if (newAirplane.getCapacity() > 0){
+                airplane.setCapacity(newAirplane.getCapacity());
+            }
+            
+            response.setStatus(202);
+            response.addHeader("Location", "api/airplanes/" + airplaneId);
+            return airplaneRepository.save(airplane);
+    }
+    
     @DeleteMapping("/airplanes/{id}")
     public ResponseEntity<?> deleteAirplane(@PathVariable(value = "id") Long airplaneId){
         Airplane airplane = airplaneRepository.findById(airplaneId).orElseThrow(() -> new WebException("DELETE api/airplanes/id", "- no such user"));
