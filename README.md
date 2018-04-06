@@ -12,7 +12,7 @@ Schedules endpoint: </br>
 
 api/schedules GET - no params </br>
 api/schedules/id GET - in url - id </br>
-api/schedules POST - in body - from(string), to(string), airplaneId(int) </br>
-api/schedules/id PUT - in url - id - in body - from(string), to(string), airplaneId(int) </br>
+api/schedules POST - in body - startPort(string), destination(string), airplaneId(int) </br>
+api/schedules/id PUT - in url - id - in body - startPort(string), destination(string), airplaneId(int) </br>
 api/schedules/id DELETE - in url - id </br>
 
